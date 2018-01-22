@@ -4,14 +4,16 @@
     "description"   : "A WeChat Integration Node-Red Implementation",
     "dependencies"  : {
         "wechat"                     : "^2.0.3",
-        "wechat-api"                 : "^1.28.0"
+        "wechat-api"                 : "^1.28.0",
+        "node-red-viseo-helper"      : "~0.1",
+        "node-red-viseo-bot-manager" : "~0.0"
     },
     "repository" : {
         "type":"git",
-        "url":"https://github.com/mavericklam/node-red-contrib-wechat"
+        "url":"https://github.com/NGRP/node-red-contrib-viseo/tree/master/node-red-contrib-wechat"
     },
     "license": "Apache-2.0",
-    "keywords": ["wechat", "node-red" ],
+    "keywords": [ "viseo", "sarah", "node-red" ],
     "node-red" : {
         "nodes": {
             "wechat":        "bot-wechat.js",
