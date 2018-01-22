@@ -73,8 +73,7 @@ function middleware (node, config) {
             inputType:  'message.MsgType',
             source:     'wechat'
         });
-        console.log(req.wexin)
-        console.log("shit viseo")
+
         switch (req.weixin.MsgType) {
             case "text":
                 data.payload = req.weixin.Content;
@@ -82,7 +81,7 @@ function middleware (node, config) {
             case "image":
                 data.payload = req.weixin.EventKey || "";
                 data.message.attachments.push({
-                    contentUrl: req.weixin.PicUrl,
+                    contentUrl: req.weixin.PicUrl, 
                     contentType: "image",
                     contentId: req.weixin.MediaId
                 });
@@ -129,7 +128,7 @@ function middleware (node, config) {
             case "event":
                 if (req.weixin.Event === "location_select") { res.status(200).end(); return; }
                 else if (req.weixin.Event.match(/pic/)) WAIT_MESSAGES = req.weixin.SendPicsInfo.Count;
-
+            
                 data.payload = req.weixin.EventKey || "";
                 let obj = { contentType: "event",
                             contentEvent: (req.weixin.ScanCodeInfo) ? req.weixin.ScanCodeInfo : {}};
@@ -157,13 +156,13 @@ function middleware (node, config) {
                 data.message.attachments = [];
                 for (let i = 1; i < WAIT_QUEUE.length; i++) {
                     data.message.attachments.push({
-                        contentUrl: WAIT_QUEUE[i].message.PicUrl,
+                        contentUrl: WAIT_QUEUE[i].message.PicUrl, 
                         contentType: "image",
                         contentId: WAIT_QUEUE[i].message.MediaId
                     });
                 }
-            }
-            else {
+            } 
+            else {    
                 data = WAIT_QUEUE[1];
                 data.payload = WAIT_QUEUE[0].payload;
             }
@@ -174,12 +173,12 @@ function middleware (node, config) {
         let convId  = botmgr.getConvId(data)
         if (botmgr.hasDelayedCallback(convId, data.message)) return;
 
-        api.getUser({openid: convId, lang:'en'},
-            (err, result) => {
+        api.getUser({openid: convId, lang:'en'}, 
+            (err, result) => { 
                 if (err) { node.error(err); return; }
                 data.user.profile = result;
                 return node.send(data);
-            });
+            });  
     });
 }
 
@@ -198,7 +197,7 @@ const reply = (node, data, config) => {
             if (err) { node.warn(err); }
             helper.fireAsyncCallback(data);
         });
-    }
+    } 
     catch(ex){
          console.log("ERROR:", ex);
     }
@@ -236,7 +235,7 @@ const sendMessage = exports.sendMessage = (replies, id, callback) => {
         api.sendNews(id, myArray, callback);
         return;
     }
-
+    
     let reply = replies[0];
     let buttons = (reply.buttons !== undefined && reply.buttons.length > 0) ? true : false ;
     let pmt = reply.prompt;
@@ -252,7 +251,7 @@ const sendMessage = exports.sendMessage = (replies, id, callback) => {
             if (err) { return callback(err); }
             api.sendImage(id, res.media_id, callback);
         })
-        return;
+        return; 
     }
     if (reply.type === "card") {              // Card
 
@@ -268,7 +267,7 @@ const sendMessage = exports.sendMessage = (replies, id, callback) => {
             if (key.match(/^http/ig)) json.url = key;
             else json.key = key;
         }
-
+        
         let myArray = [];
         myArray.push(json);
 
@@ -305,7 +304,7 @@ const menu = (node, data, config) => {
                     "name": button.title,
                     "sub_button": []
                 }
-                for (let subButt of subButtons[i-1]) {
+                for (let subButt of subButtons[i-1]) {       
                     let sub = {
                         "name": subButt.title,
                         "type": subButt.action
@@ -320,7 +319,7 @@ const menu = (node, data, config) => {
                     "type": button.action,
                     "name": button.title,
                     "key":  button.value
-                }
+                }    
             }
             i += 1;
             buttons.push(json);
@@ -328,11 +327,11 @@ const menu = (node, data, config) => {
     }
 
     // ENVOYER LES BOUTONS
-    api.createMenu({ button: buttons}, function (err) {
+    api.createMenu({ button: buttons}, function (err) { 
         if (err) {
             node.warn(buttons);
             node.error(err);
-            return false;
+            return false; 
         }
         else {
             node.warn("Successfully sent menu.")
@@ -342,6 +341,6 @@ const menu = (node, data, config) => {
 }
 
 const input = (node, data, config) => {
-
+    
         if (!api) return node.send(data);
     }
